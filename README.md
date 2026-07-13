@@ -38,6 +38,9 @@ Source files that are not part of the core **ExplorerBgToolRe** project but are 
 
 While the [ebtl](https://github.com/lpierge/ebtl) loader is _not required_ to compile or link the DLL, _it is  absolutely required_ for managing the installation, registration, unregistration and reloading processes, as well as restarting Explorer when needed. See the related [repository](https://github.com/lpierge/ebtl) and the below **Windows binaries and Installer** section.
 
+Once you have downloaded all the required repositories, build the projects in the following order: the ExplorerBgToolRe DLL first and the loader before.
+The Visual Studio solution for ExplorerBgToolRe includes a post-build script that copies the compiled DLL as _ExplorerBgToolRe.bin_ into the _res_ folder of the ebtl project. This allows the DLL to be embedded as a resource inside ebtl.exe and extracted later during installation.
+
 ## Implementation notes
 
 Most of the code rewrite is located within the `dllmain.*` and `WinAPI.*` source files. The `ShellLoader.*` files has been patched in specific targeted sections, while other minor corrections throughout the codebase are explicitly marked with the `//LPI` comment tag.
