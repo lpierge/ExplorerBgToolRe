@@ -6,7 +6,7 @@
 This project started as a **fork** to revive the original shell extension, but ultimately resulted in an extensive **code refactoring and rewriting**, critical **bug fixes** and brand **new features**.
 
 ## Architecture Changes and Improvements
-The original design has been restructured and multiple bugs have been fixed, especially regarding concurrency issues and memory leaks. The existing codebase has been cleaned and improved, including a complete rewrite of many core and generic functions, as well as specific components like the image management class.
+The original design has been restructured and multiple bugs have been fixed, especially regarding concurrency issues and memory leaks, as documented in the source code. The existing codebase has been cleaned and improved, including a complete rewrite of many core and generic functions, as well as specific components like the image management class.
 
 ### From Global Maps to Thread Local Storage (TLS)
 The most significant architectural change is the removal of the original shared graphic data map and a complete flip of the original approach. Instead of fighting with shared data and increasingly complex locking mechanisms, I turned the problem on its head by replacing the shared graphics map with the native Win32 **Thread Local Storage (TLS)**. Thanks to TLS, each thread now owns its isolated graphic data block, making it completely independent and eliminating the need for access locks.
