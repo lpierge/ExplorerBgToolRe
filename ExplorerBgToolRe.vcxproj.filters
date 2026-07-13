@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="minihook">
+      <UniqueIdentifier>{abae1256-a4ad-4bfc-80d7-fbd9a7b75a2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="minihook\hde">
+      <UniqueIdentifier>{1fec5bf3-6117-415b-aa4c-a1ae84aa9f3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Code">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="minihook\buffer.h">
+      <Filter>minihook</Filter>
+    </ClInclude>
+    <ClInclude Include="minihook\trampoline.h">
+      <Filter>minihook</Filter>
+    </ClInclude>
+    <ClInclude Include="minihook\hde\hde32.h">
+      <Filter>minihook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="minihook\hde\hde64.h">
+      <Filter>minihook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="minihook\hde\pstdint.h">
+      <Filter>minihook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="minihook\hde\table32.h">
+      <Filter>minihook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="minihook\hde\table64.h">
+      <Filter>minihook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="MinHook.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WinAPI.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HookDef.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellLoader.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\fastrand.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\datetime.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\env.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\macro.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\pragma.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\typedef.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Include\traceexpr.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ExplorerBgToolRe.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="minihook\buffer.cpp">
+      <Filter>minihook</Filter>
+    </ClCompile>
+    <ClCompile Include="minihook\hook.cpp">
+      <Filter>minihook</Filter>
+    </ClCompile>
+    <ClCompile Include="minihook\trampoline.cpp">
+      <Filter>minihook</Filter>
+    </ClCompile>
+    <ClCompile Include="minihook\hde\hde32.cpp">
+      <Filter>minihook\hde</Filter>
+    </ClCompile>
+    <ClCompile Include="minihook\hde\hde64.cpp">
+      <Filter>minihook\hde</Filter>
+    </ClCompile>
+    <ClCompile Include="WinAPI.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="ShellLoader.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Library\datetime.c">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Library\fastrand.c">
+      <Filter>Code</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Library\traceexpr.c">
+      <Filter>Code</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.def">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ExplorerBgToolRe.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
