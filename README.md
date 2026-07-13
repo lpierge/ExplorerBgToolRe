@@ -1,7 +1,7 @@
 # ExplorerBgToolRe(dux)
 
 ## Overview
-**ExplorerBgToolRe(dux)** is a complete rewrite and enhancement of the original [ExplorerBgTool](https://github.com/Maplespe/explorerTool) by Maple, a shell extension used to customize the Windows Explorer background with custom images. 
+**ExplorerBgToolRe(dux)** is a complete rewrite and enhancement of the original [ExplorerBgTool](https://github.com/Maplespe/explorerTool) (explorerTool) by Maple, a shell extension used to customize the Windows Explorer background with custom images. 
 
 This project started as a **fork** to revive the original shell extension, but ultimately resulted in an extensive **code refactoring and rewriting**, critical **bug fixes** and brand **new features**.
 
