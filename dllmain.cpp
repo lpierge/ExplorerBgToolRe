@@ -669,6 +669,7 @@ BOOL CALLBACK LoadImagesCallback(PINIT_ONCE InitOnce,PVOID Parameter,PVOID* Cont
 		{
 			wchar_t wzBuffer[1024] = {0};
 			swprintf_s(wzBuffer,1024-1,L"ERROR: the folder <%s> for Explorer background images is empty.",imgPath.c_str());
+			MessageBeep(MB_ICONERROR);
 			MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 			return(TRUE);
 		}
@@ -818,6 +819,7 @@ BOOL CALLBACK LoadImagesCallback(PINIT_ONCE InitOnce,PVOID Parameter,PVOID* Cont
 		{
 			wchar_t wzBuffer[1024] = {0};
 			swprintf_s(wzBuffer,1024-1,L"ERROR: the folder <%s> for Explorer background images does not exist.",imgPath.c_str());
+			MessageBeep(MB_ICONERROR);
 			MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 		}
 	}
@@ -954,6 +956,7 @@ void OnWindowLoad(void)
 			global_bInitFailed = TRUE;
 			if(global_stConfig.showerrors)
 			{
+				MessageBeep(MB_ICONERROR);
 				MessageBoxW(NULL,L"FATAL ERROR: Unable to initialize GDI+.",L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 				return;
 			}
@@ -1011,6 +1014,7 @@ void OnWindowLoad(void)
 					case MH_ERROR_FUNCTION_NOT_FOUND:	wcscpy_s(wzError,_MAX_PATH,L"ERROR: The specified function is not found.");																		break;
 				}
 				wcscat_s(wzError,_MAX_PATH,L"\n(failed to initialize disassembly, probably extension already loaded)");
+				MessageBeep(MB_ICONERROR);
 				MessageBoxW(NULL,wzError,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 			}
 			return;
@@ -1155,6 +1159,7 @@ void OnDocComplete(std::wstring path,DWORD threadID)
 				{
 					wchar_t wzBuffer[1024] = {0};
 					swprintf_s(wzBuffer,1024-1,L"ERROR: the image <%s> specified for the special folder <%s> cannot be loaded (unsupported format or no such file).",fileName.c_str(),normalizedPath.c_str());
+					MessageBeep(MB_ICONERROR);
 					MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 				}
 			}
