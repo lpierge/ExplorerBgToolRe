@@ -241,7 +241,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,DWORD dwReason,LPVOID lpReserved)
 		TRACEEXPR((_TRACE_FLAG_INFO,_L(__FILE__),__LINE__,L"DllMain(): hModule: %p\n",(void*)global_hModule));
         
 		// alloca l'indice TLS globale per il processo
-		global_dwTlsIndex = TlsAlloc();
+		global_dwTlsIndex = ::TlsAlloc();
 		if(global_dwTlsIndex==TLS_OUT_OF_INDEXES)
 		{
 			TRACEEXPR((_TRACE_FLAG_ERR,_L(__FILE__),__LINE__,L"DllMain(): FATAL ERROR: TLS_OUT_OF_INDEXES\n"));
@@ -294,7 +294,7 @@ BOOL APIENTRY DllMain(HMODULE hModule,DWORD dwReason,LPVOID lpReserved)
             
 			if(global_dwTlsIndex!=TLS_OUT_OF_INDEXES)
 			{
-				TlsFree(global_dwTlsIndex);
+				::TlsFree(global_dwTlsIndex);
 				global_dwTlsIndex = TLS_OUT_OF_INDEXES;
 			}
 		}
@@ -323,11 +323,11 @@ BOOL APIENTRY DllMain(HMODULE hModule,DWORD dwReason,LPVOID lpReserved)
 		// ogni volta che un thread di Explorer muore, pulisce i suoi dati privati
 		if(global_dwTlsIndex!=TLS_OUT_OF_INDEXES)
 		{
-			MyData* pData = (MyData*)TlsGetValue(global_dwTlsIndex);
+			MyData* pData = (MyData*)::TlsGetValue(global_dwTlsIndex);
 			if(pData!=nullptr)
 			{
 				delete pData;
-				TlsSetValue(global_dwTlsIndex,NULL);
+				::TlsSetValue(global_dwTlsIndex,NULL);
 				TRACEEXPR((_TRACE_FLAG_INFO,_L(__FILE__),__LINE__,L"DllMain(): TLS cleaning for the dying thread\n"));
 			}
 		}
@@ -576,7 +576,7 @@ void LoadSettings(void)
 	stConfig.graphicsformats= GetIniString(cfgPath.c_str(),L"image",L"graphicsformats");
 
 	// lock "mordi e fuggi" per non scasinare con i vari lock di sistema
-	AcquireSRWLockExclusive(&global_SRWLock);
+	::AcquireSRWLockExclusive(&global_SRWLock);
 	global_stConfig.whitelist		= stConfig.whitelist;
 	global_stConfig.filedialog		= stConfig.filedialog;
 	global_stConfig.filedialoglist	= stConfig.filedialoglist;
@@ -590,7 +590,7 @@ void LoadSettings(void)
 	global_stConfig.customfolder	= stConfig.customfolder;
 	global_stConfig.specialfolders	= stConfig.specialfolders;
 	global_stConfig.graphicsformats	= stConfig.graphicsformats;
-	ReleaseSRWLockExclusive(&global_SRWLock);
+	::ReleaseSRWLockExclusive(&global_SRWLock);
 }
 
 /*
@@ -619,7 +619,7 @@ void LoadImages(void)
 	// se 10 thread arrivano qui insieme, solo uno eseguira' la LoadImagesCallback()
 	// gli altri 9 dovranno aspettare la fine del caricamento prima di proseguire
 	// NON interferisce con i mutex del Kernel
-	InitOnceExecuteOnce(&global_InitOnceImg,LoadImagesCallback,NULL,NULL);
+	::InitOnceExecuteOnce(&global_InitOnceImg,LoadImagesCallback,NULL,NULL);
 }
 
 /*
@@ -669,8 +669,8 @@ BOOL CALLBACK LoadImagesCallback(PINIT_ONCE InitOnce,PVOID Parameter,PVOID* Cont
 		{
 			wchar_t wzBuffer[1024] = {0};
 			swprintf_s(wzBuffer,1024-1,L"ERROR: the folder <%s> for Explorer background images is empty.",imgPath.c_str());
-			MessageBeep(MB_ICONERROR);
-			MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
+			::MessageBeep(MB_ICONERROR);
+			::MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 			return(TRUE);
 		}
 
@@ -883,11 +883,11 @@ MyData* GetLocalData(bool bCreateOnDemand)
 	if(global_dwTlsIndex==TLS_OUT_OF_INDEXES)
 		return(nullptr);
     
-	MyData* pData = (MyData*)TlsGetValue(global_dwTlsIndex);
+	MyData* pData = (MyData*)::TlsGetValue(global_dwTlsIndex);
 	if(!pData && bCreateOnDemand)
 	{
 		pData = new MyData();
-		TlsSetValue(global_dwTlsIndex,pData);
+		::TlsSetValue(global_dwTlsIndex,pData);
 	}
 
 	return(pData);
@@ -949,15 +949,15 @@ void OnWindowLoad(void)
 
 		// deve caricare GDI prima di caricare le immagini
 		Gdiplus::GdiplusStartupInput StartupInput;
-		Gdiplus::Status ret = GdiplusStartup(&global_GdiPlusToken,&StartupInput,NULL);
+		Gdiplus::Status ret = Gdiplus::GdiplusStartup(&global_GdiPlusToken,&StartupInput,NULL);
 		if(ret!=Gdiplus::Ok)
 		{
 			TRACEEXPR((_TRACE_FLAG_ERR,_L(__FILE__),__LINE__,L"OnWindowLoad(): FATAL ERROR initializing GDI\n"));
 			global_bInitFailed = TRUE;
 			if(global_stConfig.showerrors)
 			{
-				MessageBeep(MB_ICONERROR);
-				MessageBoxW(NULL,L"FATAL ERROR: Unable to initialize GDI+.",L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
+				::MessageBeep(MB_ICONERROR);
+				::MessageBoxW(NULL,L"FATAL ERROR: Unable to initialize GDI+.",L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 				return;
 			}
 		}
@@ -981,11 +981,11 @@ void OnWindowLoad(void)
 		MH_STATUS ms = MH_Initialize();
 		if(ms==MH_OK)
 		{
-			CreateMHook(CreateWindowExW,	MyCreateWindowExW,		_CreateWindowExW_,		1);
-			CreateMHook(DestroyWindow,		MyDestroyWindow,		_DestroyWindow_,		2);
-			CreateMHook(BeginPaint,			MyBeginPaint,			_BeginPaint_,			3);
-			CreateMHook(FillRect,			MyFillRect,				_FillRect_,				4);
-			CreateMHook(CreateCompatibleDC,	MyCreateCompatibleDC,	_CreateCompatibleDC_,	5);
+			CreateMHook(::CreateWindowExW,		MyCreateWindowExW,		_CreateWindowExW_,		1);
+			CreateMHook(::DestroyWindow,		MyDestroyWindow,		_DestroyWindow_,		2);
+			CreateMHook(::BeginPaint,			MyBeginPaint,			_BeginPaint_,			3);
+			CreateMHook(::FillRect,				MyFillRect,				_FillRect_,				4);
+			CreateMHook(::CreateCompatibleDC,	MyCreateCompatibleDC,	_CreateCompatibleDC_,	5);
 
 			MH_EnableHook(MH_ALL_HOOKS);
 
@@ -1014,8 +1014,8 @@ void OnWindowLoad(void)
 					case MH_ERROR_FUNCTION_NOT_FOUND:	wcscpy_s(wzError,_MAX_PATH,L"ERROR: The specified function is not found.");																		break;
 				}
 				wcscat_s(wzError,_MAX_PATH,L"\n(failed to initialize disassembly, probably extension already loaded)");
-				MessageBeep(MB_ICONERROR);
-				MessageBoxW(NULL,wzError,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
+				::MessageBeep(MB_ICONERROR);
+				::MessageBoxW(NULL,wzError,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 			}
 			return;
 		}
@@ -1159,8 +1159,8 @@ void OnDocComplete(std::wstring path,DWORD threadID)
 				{
 					wchar_t wzBuffer[1024] = {0};
 					swprintf_s(wzBuffer,1024-1,L"ERROR: the image <%s> specified for the special folder <%s> cannot be loaded (unsupported format or no such file).",fileName.c_str(),normalizedPath.c_str());
-					MessageBeep(MB_ICONERROR);
-					MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
+					::MessageBeep(MB_ICONERROR);
+					::MessageBoxW(NULL,wzBuffer,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 				}
 			}
 		}
