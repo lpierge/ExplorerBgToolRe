@@ -72,7 +72,7 @@ After downloading and unzipping the file, open a Command Prompt (press `Win + R`
 
 This will install and register the DLL in the default folder `C:\ExplorerBgToolRe`. The installation process will also create two subdirectories (`Image` and `Chibi`), containing sample images and a `config.ini` configuration file. Make sure to read the comments inside the `config.ini` carefully before modifying it.
 
-P.S. If you are into the manga/anime genre and have run out of sources to download images from, or if you are tired of manually saving them one by one, I also developed a wallpaper manager available [here](https://sourceforge.net/projects/kalimero/), have a look.
+_**P.S. If you are into the manga/anime genre and have run out of sources to download images from, or if you are tired of manually saving them one by one, I also developed a wallpaper manager available [here](https://sourceforge.net/projects/kalimero/), have a look.**_
 
 ## Screenshots
 _**This PC and Documents folders**_
