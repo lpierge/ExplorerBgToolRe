@@ -64,6 +64,7 @@
 
 	Luca Piergentili, 18/06/2026
 */
+#include "pragma.h"
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -997,23 +998,23 @@ void OnWindowLoad(void)
 			global_bInitFailed = TRUE;
 			if(global_stConfig.showerrors)
 			{
-				wchar_t wzError[_MAX_PATH+1] = {L"Unknown fatal error."};
+				wchar_t wzError[1024] = {L"Unknown fatal error."};
 				switch(ms)
 				{
-					case MH_ERROR_ALREADY_INITIALIZED:	wcscpy_s(wzError,_MAX_PATH,L"ERROR: MinHook is already initialized.");																			break;
-					case MH_ERROR_NOT_INITIALIZED:		wcscpy_s(wzError,_MAX_PATH,L"ERROR: MinHook is not initialized yet, or already uninitialized.");												break;
-					case MH_ERROR_ALREADY_CREATED:		wcscpy_s(wzError,_MAX_PATH,L"ERROR: The hook for the specified target function is already created.");											break;
-					case MH_ERROR_NOT_CREATED:			wcscpy_s(wzError,_MAX_PATH,L"ERROR: The hook for the specified target function is not created yet.");											break;
-					case MH_ERROR_ENABLED:				wcscpy_s(wzError,_MAX_PATH,L"ERROR: The hook for the specified target function is already enabled.");											break;
-					case MH_ERROR_DISABLED:				wcscpy_s(wzError,_MAX_PATH,L"ERROR: The hook for the specified target function is not enabled yet, or already disabled.");						break;
-					case MH_ERROR_NOT_EXECUTABLE:		wcscpy_s(wzError,_MAX_PATH,L"ERROR: The specified pointer is invalid. It points the address of non-allocated and/or non-executable region.");	break;
-					case MH_ERROR_UNSUPPORTED_FUNCTION:	wcscpy_s(wzError,_MAX_PATH,L"ERROR: The specified target function cannot be hooked.");															break;
-					case MH_ERROR_MEMORY_ALLOC:			wcscpy_s(wzError,_MAX_PATH,L"ERROR: Failed to allocate memory.");																				break;
-					case MH_ERROR_MEMORY_PROTECT:		wcscpy_s(wzError,_MAX_PATH,L"ERROR: Failed to change the memory protection.");																	break;
-					case MH_ERROR_MODULE_NOT_FOUND:		wcscpy_s(wzError,_MAX_PATH,L"ERROR: The specified module is not loaded.");																		break;
-					case MH_ERROR_FUNCTION_NOT_FOUND:	wcscpy_s(wzError,_MAX_PATH,L"ERROR: The specified function is not found.");																		break;
+					case MH_ERROR_ALREADY_INITIALIZED:	wcsncpy(wzError,L"ERROR: MinHook is already initialized.",_countof(wzError)-1); break;
+					case MH_ERROR_NOT_INITIALIZED:		wcsncpy(wzError,L"ERROR: MinHook is not initialized yet, or already uninitialized.",_countof(wzError)-1); break;
+					case MH_ERROR_ALREADY_CREATED:		wcsncpy(wzError,L"ERROR: The hook for the specified target function is already created.",_countof(wzError)-1); break;
+					case MH_ERROR_NOT_CREATED:			wcsncpy(wzError,L"ERROR: The hook for the specified target function is not created yet.",_countof(wzError)-1); break;
+					case MH_ERROR_ENABLED:				wcsncpy(wzError,L"ERROR: The hook for the specified target function is already enabled.",_countof(wzError)-1); break;
+					case MH_ERROR_DISABLED:				wcsncpy(wzError,L"ERROR: The hook for the specified target function is not enabled yet, or already disabled.",_countof(wzError)-1); break;
+					case MH_ERROR_NOT_EXECUTABLE:		wcsncpy(wzError,L"ERROR: The specified pointer is invalid. It points the address of non-allocated and/or non-executable region.",_countof(wzError)-1); break;
+					case MH_ERROR_UNSUPPORTED_FUNCTION:	wcsncpy(wzError,L"ERROR: The specified target function cannot be hooked.",_countof(wzError)-1); break;
+					case MH_ERROR_MEMORY_ALLOC:			wcsncpy(wzError,L"ERROR: Failed to allocate memory.",_countof(wzError)-1); break;
+					case MH_ERROR_MEMORY_PROTECT:		wcsncpy(wzError,L"ERROR: Failed to change the memory protection.",_countof(wzError)-1); break;
+					case MH_ERROR_MODULE_NOT_FOUND:		wcsncpy(wzError,L"ERROR: The specified module is not loaded.",_countof(wzError)-1); break;
+					case MH_ERROR_FUNCTION_NOT_FOUND:	wcsncpy(wzError,L"ERROR: The specified function is not found.",_countof(wzError)-1); break;
 				}
-				wcscat_s(wzError,_MAX_PATH,L"\n(failed to initialize disassembly, probably extension already loaded)");
+				wcscat_s(wzError,_countof(wzError),L"\n(failed to initialize disassembly, probably extension already loaded)");
 				::MessageBeep(MB_ICONERROR);
 				::MessageBoxW(NULL,wzError,L"ExplorerBgToolRe",MB_ICONERROR|MB_SYSTEMMODAL|MB_OK);
 			}
