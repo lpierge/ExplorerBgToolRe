@@ -3,23 +3,23 @@
 ## Overview
 **ExplorerBgToolRe(dux)** is a complete rewrite and enhancement of the original [ExplorerBgTool](https://github.com/Maplespe/explorerTool) (explorerTool) by Maple, a shell extension used to customize the Windows Explorer background with custom images. 
 
-This project started as a **fork** to revive the original shell extension, but ultimately resulted in an extensive **code refactoring and rewriting**, critical **bug fixes** and brand **new features**.
+This project started as a **fork** to revive the original shell extension, but ultimately resulted in an extensive **code refactoring and rewriting**, including critical **bug fixes** and brand **new features**.
 
 ## Architecture Changes and Improvements
 The original design has been restructured and multiple bugs have been fixed, especially regarding concurrency issues and memory leaks, as documented in the source code. The existing codebase has been cleaned and improved, including a complete rewrite of many core and generic functions, as well as specific components like the image management class.
 
 ### From Global Maps to Thread Local Storage (TLS)
-The most significant architectural change is the removal of the original shared graphic data map and a complete flip of the original approach. Instead of fighting with shared data and increasingly complex locking mechanisms, I turned the problem on its head by replacing the shared graphics map with the native Win32 **Thread Local Storage (TLS)**. Thanks to TLS, each thread now owns its isolated graphic data block, making it completely independent and eliminating the need for access locks.
+The most significant architectural change is the removal of the original shared graphic data map and a complete flip of the original approach. Instead of fighting with shared data and increasingly complex locking mechanisms, I turned the problem on its head by replacing the shared graphics map with the native Win32 **Thread Local Storage (TLS)**, where each thread owns its isolated graphic data block, making it completely independent and eliminating the need for access locks.
 
 The synchronization locks in the original codebase were either inconsistent or entirely absent (such as in the `[]` operator usage), which may have led to synchronization issues and memory corruption. On the other hand, introducing global mutexes disrupted the thread timing within Explorer itself, causing sudden deadlocks and unexpected crashes (an explanation of these lock-related issues is documented in the `dllmain.cpp` source file).
 
-In other words, instead of designing complex and over-engineered synchronization classes, the architecture was redesigned to grant each individual thread its own private memory space using Thread Local Storage.
+In other words, instead of designing complex and over-engineered synchronization classes, the architecture was redesigned to grant each individual thread its own private memory space.
 
 ## New Features
 
 In addition to fixing and refactoring/rewriting the original code, the following new features have been introduced:
 
-- **Dedicated loader (`ebtl.exe`):** developed a standalone utility, available in the [ebtl](https://github.com/lpierge/ebtl) repository, to handle the automated installation, registration, unregistration, reloading of the DLL and command-line Explorer restarts. It automatically requests Administrator privileges when required, fully replacing the original and unreliable batch file mechanism.
+- **Dedicated loader (`ebtl.exe`):** developed a standalone utility, available in the [ebtl](https://github.com/lpierge/ebtl) repository, to handle the automated installation, registration, unregistration, configuration, reloading of the DLL and command-line Explorer restarts. It automatically requests Administrator privileges when needed, replacing the original and unreliable batch file mechanism.
 - **Process whitelist:** added a configurable whitelist to specify exactly which programs are authorized to load the DLL.
 - **File dialog backgrounds:** created a dedicated whitelist to allow specified applications to load the DLL exclusively for changing the background image of standard "Open/Save File" dialogs.
 - **Window subclassing:** subclassed the Explorer window to dynamically alter transparency levels based on whether the window is in the foreground or background.
@@ -36,7 +36,7 @@ Source files that are not part of the core **ExplorerBgToolRe** project but are 
 * [Include](https://github.com/lpierge/Include) — Shared header (.h) files
 * [Library](https://github.com/lpierge/Library) — Shared source (.c/.cpp) files
 
-While the [ebtl](https://github.com/lpierge/ebtl) loader is _not required_ to compile or link the DLL, _it is  absolutely required_ for managing the installation, registration, unregistration and reloading processes, as well as restarting Explorer when needed. See the related [repository](https://github.com/lpierge/ebtl) and the below **Windows binaries and Installer** section.
+While the [ebtl](https://github.com/lpierge/ebtl) loader is _not required_ to compile or link the DLL, _it is  absolutely required_ for managing the installation, registration, unregistration, configuration and reloading processes, as well as restarting Explorer when needed. See the related [repository](https://github.com/lpierge/ebtl) and the below **Windows binaries and Installer** section.
 
 Once you have downloaded all the required repositories, build first the ExplorerBgToolRe DLL and only next the loader.
 The Visual Studio solution for ExplorerBgToolRe includes a post-build script that copies the compiled DLL as _ExplorerBgToolRe.bin_ into the _res_ folder of the ebtl project. This allows the DLL to be embedded as a resource inside ebtl.exe and extracted later during installation.
